@@ -4,7 +4,7 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "build": "rimraf dist/ && cross-env NODE_ENV=production webpack",
+    "build": "cross-env NODE_ENV=production webpack",
     "dev": "concurrently \"yarn dev:client\"",
     "dev:client": "cross-env NODE_ENV=development webpack-dev-server"
   },
