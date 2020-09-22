@@ -1,12 +1,14 @@
-import { h, render } from 'preact';
+import { createElement, render } from 'preact';
 import { setPragma } from 'goober';
 import normalize from './global/normalizeStyles';
-import { App } from './App';
+import App from './App';
 
-setPragma(h);
+import './assets/ionicons.woff'
+import './assets/fonts.css'
+import './assets/main.css'
+import './assets/ionicons.min.css'
+
+setPragma(createElement);
 normalize();
 
-const root = document.getElementById('root');
-if (root) {
-  render(<App />, root);
-}
+render(<App />, document.getElementById('root'));

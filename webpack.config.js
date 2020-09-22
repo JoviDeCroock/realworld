@@ -7,6 +7,8 @@ const HtmlWebpackEsmodulesPlugin = require('webpack-module-nomodule-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const babelConfig = require('./.babelrc');
 const PreactRefreshPlugin = require('@prefresh/webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const env = babelConfig.env;
 const modernTerser = new TerserPlugin({
@@ -41,6 +43,9 @@ const makeConfig = (mode) => {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
       'process.env.API_URL': JSON.stringify(apiUrl),
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].[contenthash:5].css'
     }),
   ];
 
@@ -111,7 +116,20 @@ const makeConfig = (mode) => {
           loader: 'graphql-tag/loader'
         },
         {
-          test: /\.(png|jpe?g|gif)$/,
+          test: /\.(sa|sc|c)ss$/,
+					use: [
+						{
+							loader: MiniCssExtractPlugin.loader,
+							options: {
+								esModule: true,
+								fallback: 'style-loader'
+							}
+						},
+						{ loader: 'css-loader', options: { esModule: true } }
+					]
+				},
+        {
+          test: /\.(png|jpe?g|gif|woff)$/,
           use: [
             {
               loader: 'file-loader',

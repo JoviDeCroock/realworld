@@ -1,18 +1,23 @@
-import { h } from 'preact';
-import { Provider } from '@urql/preact';
+import { lazy, Suspense, createElement } from 'preact/compat';
 import { Router } from 'preact-router';
-import AsyncRoute from 'preact-async-route';
-import gqlClient from './global/graphql';
-import Loading from './common/Loading';
-import ErrorBoundary from './global/ErrorBoundary';
 
-export const App = () => (
-  <ErrorBoundary>
-    <Provider value={gqlClient}>
-      <Router>
-        <AsyncRoute path="/" getComponent={() => import('./modules/landing').then(m => m.default)} loading={Loading} />
-        <AsyncRoute path="/auth" getComponent={() => import('./modules/auth').then(m => m.default)} loading={Loading} />
-      </Router>
-    </Provider>
-  </ErrorBoundary>
-);
+import { Loading } from './common';
+import { ApiProvider } from './lib/use-api';
+
+const HomePage = lazy(() => import('./modules/arcticles'));
+
+export default function App() {
+	return (
+    <ApiProvider>
+      <div id="app">
+        <div id="main">
+          <Suspense loading={<Loading />}>
+            <Router>
+              <HomePage path="/" />
+            </Router>
+          </Suspense>
+        </div>
+      </div>
+    </ApiProvider>
+	);
+}

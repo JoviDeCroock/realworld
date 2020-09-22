@@ -3,16 +3,14 @@ const plugins = [
   '@babel/plugin-syntax-dynamic-import'
 ].filter(Boolean);
 
-const presets = [
-
-];
+const presets = [];
 
 module.exports = {
   env: {
     legacy: {
       presets: [
         ['@babel/preset-typescript', {
-          jsxPragma: 'h',
+          jsxPragma: 'createElement',
         }],
         [
           '@babel/preset-env', {
@@ -32,13 +30,13 @@ module.exports = {
         ['@babel/plugin-transform-runtime', { corejs: 3 }],
 
         ['@babel/plugin-transform-react-jsx', {
-          'pragma': 'h',
+          'pragma': 'createElement',
           'pragmaFrag': 'Fragment',
         }],
         [
           'auto-import', {
             'declarations': [
-              { 'members': ['h', 'Fragment'], 'path': 'preact' }
+              { 'members': ['createElement', 'h', 'Fragment'], 'path': 'preact' }
             ]
           }
         ],
