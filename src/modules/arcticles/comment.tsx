@@ -1,6 +1,6 @@
 import { createElement } from 'preact';
 import tinytime from 'tinytime';
-import { normalizeImage } from '../lib/normalize-image';
+import smiley from '../../assets/smiley-cyrus.jpg'
 
 const date = tinytime('{MMMM} {Do}, {YYYY}');
 
@@ -15,7 +15,7 @@ export default function Comment({ comment }) {
 			<div class="card-footer">
 				<a href={authorUrl} class="comment-author">
 					<img
-						src={normalizeImage(comment.author.image)}
+						src={smiley}
 						class="comment-author-img"
 					/>
 				</a>{' '}

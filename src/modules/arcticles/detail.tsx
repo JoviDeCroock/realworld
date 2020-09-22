@@ -1,13 +1,11 @@
+import { Suspense } from 'preact/compat';
 import ArticleMeta from './meta';
 import ArticleComments from './comments';
-import { useApi } from '../lib/use-api';
+import { useApi } from '../../lib/use-api';
+import { Loading } from '../../common';
 
 export default function ArticlePage({ slug }) {
-	const [article, error, loading] = useApi(api => api.getArticle(slug), [slug]);
-
-	if (error) {
-		return <div class="article-page">{String(error)}</div>;
-	}
+	const article = useApi(api => api.getArticle(slug), [slug]);
 
 	if (!article) {
 		return <div class="article-page">{loading && 'Loading...'}</div>;

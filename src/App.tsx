@@ -5,6 +5,7 @@ import { Loading } from './common';
 import { ApiProvider } from './lib/use-api';
 
 const HomePage = lazy(() => import('./modules/arcticles'));
+const ArticlePage = lazy(() => import('./modules/arcticles/detail'));
 
 export default function App() {
 	return (
@@ -14,6 +15,7 @@ export default function App() {
           <Suspense loading={<Loading />}>
             <Router>
               <HomePage path="/" />
+              <ArticlePage path="/article/:slug" />
             </Router>
           </Suspense>
         </div>

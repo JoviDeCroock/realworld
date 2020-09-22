@@ -1,6 +1,5 @@
 import tinytime from 'tinytime';
 import { createElement } from 'preact';
-import { normalizeImage } from '../../lib/normalize-image';
 import smiley from '../../assets/smiley-cyrus.jpg'
 
 const date = tinytime('{MMMM} {Do}, {YYYY}');
