@@ -56,6 +56,21 @@ module.exports = {
           }
         }]
       ],
+    },
+    server: {
+      presets: [
+        '@babel/preset-typescript',
+        ['@babel/preset-modules', { loose: true }]
+      ],
+      plugins: [
+        ...plugins,
+        ['babel-plugin-transform-jsx-to-htm', {
+          'import': {
+            'module': 'htm/preact',
+            'export': 'html'
+          }
+        }]
+      ],
     }
-  }
+  },
 };

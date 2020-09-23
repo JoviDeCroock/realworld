@@ -34,26 +34,24 @@ const modernTerser = new TerserPlugin({
 const makeConfig = (mode) => {
   const { NODE_ENV } = process.env;
   const isProduction = NODE_ENV === 'production';
-  const apiUrl = process.env.DEPLOY_PRIME_URL ?
-    process.env.DEPLOY_PRIME_URL + '/.netlify/functions/graphql' :
-    process.env.API_URL
+  const isServer = mode === 'server';
+
   // Build plugins
   const plugins = [
-    new HtmlWebpackPlugin({ inject: true, template: './index.html' }),
+    !isServer && new HtmlWebpackPlugin({ inject: true, template: './index.html' }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
-      'process.env.API_URL': JSON.stringify(apiUrl),
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash:5].css'
     }),
-  ];
+  ].filter(Boolean);
 
   if (!isProduction) {
     plugins.push(new PreactRefreshPlugin());
     plugins.push(new webpack.HotModuleReplacementPlugin());
     // plugins.push(new BundleAnalyzerPlugin());
-  } else {
+  } else if (!isServer) {
     plugins.push(new HtmlWebpackEsmodulesPlugin(mode))
     // plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'static' }));
   }
@@ -85,7 +83,7 @@ const makeConfig = (mode) => {
     output: {
       chunkFilename: `[name]-[contenthash]${mode === 'modern' ? '.modern.js' : '.js'}`,
       filename: isProduction ? `[name]-[contenthash]${mode === 'modern' ? '.modern.js' : '.js'}` : `[name]${mode === 'modern' ? '.modern.js' : '.js'}`,
-      path: path.resolve(__dirname, 'dist'),
+      path: isServer ? path.resolve(__dirname, 'dist', 'server') : path.resolve(__dirname, 'dist'),
       publicPath: '/',
     },
     optimization: {
@@ -162,5 +160,5 @@ const makeConfig = (mode) => {
 };
 
 module.exports = process.env.NODE_ENV === 'production' ?
-  [makeConfig('modern'), makeConfig('legacy')] :
+  [makeConfig('modern'), makeConfig('legacy'), makeConfig('server')] :
   makeConfig('modern');
