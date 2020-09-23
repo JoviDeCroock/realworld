@@ -55,7 +55,7 @@ export default function ArticlePage({ slug }) {
 				</div>
 
 				<div class="row">
-					<Suspense fallback={<Loading />}>
+					<Suspense>
 						<ArticleComments article={article} />
 					</Suspense>
 				</div>

@@ -21,7 +21,7 @@ export default function App({ cache }) {
       <div id="app">
         <Header />
         <div id="main">
-          <Suspense fallback={<Loading />}>
+          <Suspense>
             <Router>
               <HomePage path="/" />
               <ArticlePage path="/article/:slug" />
