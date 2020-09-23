@@ -16,7 +16,6 @@ function wrapPromise(promise) {
   let suspender = promise.then(
     (r) => {
 			status = "success";
-			console.log(status, r);
       result = r;
     },
     (e) => {
@@ -83,7 +82,6 @@ export default function apiClient(options = {}) {
 
 	function handleLogin(req, data) {
 		if (!data.token) return;
-		console.log('authenticated');
 		client.setCurrentUser(data);
 		client.setToken(data.token);
 	}
@@ -161,19 +159,6 @@ function apiCall(method, url, body, config, client) {
 	}
 	opts.url = API_ROOT + url;
 
-	// const cacheKey = `${method} ${url}`;
-	// const cached = !opts.body && CACHE.get(cacheKey);
-	// if (cached) {
-	// 	const age = Date.now() - cached.time;
-	// 	const valid = age < cached.maxAge;
-	// 	console.log(`using cached value for ${cacheKey}`, {
-	// 		age,
-	// 		valid,
-	// 		time: cached.time
-	// 	});
-	// 	return cached.data;
-	// }
-
 	if (config.auth !== false && client.getToken()) {
 		opts.headers.Authorization = `Token ${client.getToken()}`;
 	}
@@ -217,7 +202,6 @@ function apiCall(method, url, body, config, client) {
 				err.response = response;
 				throw err;
 			}
-			console.log('returning', data);
 			return data;
 		});
 }
