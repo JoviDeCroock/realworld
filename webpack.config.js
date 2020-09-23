@@ -2,12 +2,9 @@ require('dotenv').config();
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const HtmlWebpackEsmodulesPlugin = require('webpack-module-nomodule-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const babelConfig = require('./.babelrc');
 const PreactRefreshPlugin = require('@prefresh/webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const env = babelConfig.env;
@@ -50,19 +47,12 @@ const makeConfig = (mode) => {
   if (!isProduction) {
     plugins.push(new PreactRefreshPlugin());
     plugins.push(new webpack.HotModuleReplacementPlugin());
-    // plugins.push(new BundleAnalyzerPlugin());
-  } else if (!isServer) {
-    plugins.push(new HtmlWebpackEsmodulesPlugin(mode))
-    // plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'static' }));
   }
 
   // Return configuration
   return {
     mode: isProduction ? 'production' : 'development',
-    entry: mode === 'legacy' ? {
-      fetch: 'whatwg-fetch',
-      main: './src/index.js',
-    } : {
+    entry: {
       main: isServer ? './src/prerender.js' :'./src/index.js'
     },
     context: path.resolve(__dirname, './'),
@@ -82,15 +72,15 @@ const makeConfig = (mode) => {
       overlay: true,
     },
     output: {
-      chunkFilename: isServer ? undefined : `[name]-[contenthash]${mode === 'modern' ? '.modern.js' : '.js'}`,
-      filename: isProduction ? isServer ? 'index.js' : `[name]-[contenthash]${mode === 'modern' ? '.modern.js' : '.js'}` : `[name]${mode === 'modern' ? '.modern.js' : '.js'}`,
+      chunkFilename: isServer ? undefined : `[name]-[contenthash].js`,
+      filename: isProduction ? isServer ? 'index.js' : `[name]-[contenthash].js` : `[name].js`,
       path: isServer ? path.resolve(__dirname, 'dist', 'server') : path.resolve(__dirname, 'dist'),
       publicPath: '/',
       libraryTarget: isServer ? 'commonjs2' : undefined
     },
     optimization: {
       minimize: !isServer,
-      minimizer: mode === 'legacy' ? undefined : [modernTerser],
+      minimizer: [modernTerser],
     },
     plugins,
     resolve: {
@@ -98,7 +88,7 @@ const makeConfig = (mode) => {
       extensions: [".mjs", ".js", ".jsx"],
       alias: {
         preact: path.resolve(__dirname, 'node_modules', 'preact'),
-        ...(mode === 'modern' ? { 'url': 'native-url' } : {})
+        url: 'native-url'
       },
     },
     module: {
@@ -109,12 +99,6 @@ const makeConfig = (mode) => {
           test: /\.mjs$/,
           include: /node_modules/,
           type: 'javascript/auto',
-        },
-        {
-          // Pre-compile graphql strings.
-          test: /\.(graphql|gql)$/,
-          exclude: /node_modules/,
-          loader: 'graphql-tag/loader'
         },
         {
           test: /\.(sa|sc|c)ss$/,
@@ -156,5 +140,5 @@ const makeConfig = (mode) => {
 };
 
 module.exports = process.env.NODE_ENV === 'production' ?
-  [makeConfig('modern'), makeConfig('legacy'), makeConfig('server')] :
+  [makeConfig('modern'), makeConfig('server')] :
   makeConfig('modern');
