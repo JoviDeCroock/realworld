@@ -32,6 +32,7 @@
     "babel-plugin-transform-jsx-to-htm": "^2.0.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.5",
+    "copy-webpack-plugin": "^6.1.1",
     "cross-env": "^7.0.2",
     "css-loader": "^4.3.0",
     "csstype": "^3.0.3",

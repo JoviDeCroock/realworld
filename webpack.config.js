@@ -5,6 +5,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const babelConfig = require('./.babelrc');
 const PreactRefreshPlugin = require('@prefresh/webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const env = babelConfig.env;
 const modernTerser = new TerserPlugin({
@@ -35,6 +36,12 @@ const makeConfig = (mode, localDev) => {
   // Build plugins
   const plugins = [
     localDev && new HtmlWebpackPlugin({ inject: true, template: './index.html' }),
+    !isServer && new CopyPlugin({
+      patterns: [
+        { from: './src/assets/ionicons.min.css', to: './ionicons.min.css' },
+        { from: './src/assets/ionicons.woff', to: './ionicons.woff' },
+      ],
+    }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
     }),
