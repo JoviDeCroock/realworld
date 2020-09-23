@@ -8,9 +8,11 @@ import './assets/ionicons.min.css'
 
 const root = document.getElementById('root')
 if (root.hasChildNodes()) {
-  const cache = window.__PRERENDER_DATA__ ;
+  console.log(window.__PRERENDER_DATA__);
+  const cache = window.__PRERENDER_DATA__;
   delete window.__PRERENDER_DATA__;
-  document.body.removeChild(document.getElementById('data'))
+  const scriptElement = document.getElementById('data');
+  document.head.removeChild(scriptElement);
   hydrate(<App cache={cache} />, root);
 } else {
   render(<App />, root);
