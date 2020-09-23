@@ -12,7 +12,7 @@ export default function App() {
     <ApiProvider>
       <div id="app">
         <div id="main">
-          <Suspense loading={<Loading />}>
+          <Suspense fallback={<Loading />}>
             <Router>
               <HomePage path="/" />
               <ArticlePage path="/article/:slug" />

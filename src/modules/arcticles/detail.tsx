@@ -1,15 +1,11 @@
-import { Suspense } from 'preact/compat';
+import { Suspense, createElement } from 'preact/compat';
 import ArticleMeta from './meta';
-import ArticleComments from './comments';
+import ArticleComments from '../comments/comments';
 import { useApi } from '../../lib/use-api';
 import { Loading } from '../../common';
 
 export default function ArticlePage({ slug }) {
 	const article = useApi(api => api.getArticle(slug), [slug]);
-
-	if (!article) {
-		return <div class="article-page">{loading && 'Loading...'}</div>;
-	}
 
 	return (
 		<div class="article-page">
@@ -59,8 +55,7 @@ export default function ArticlePage({ slug }) {
 				</div>
 
 				<div class="row">
-					{/* This error boundary means comment loading doesn't hold back route transitions or hydration. */}
-					<Suspense loading={<Loading />}>
+					<Suspense fallback={<Loading />}>
 						<ArticleComments article={article} />
 					</Suspense>
 				</div>

@@ -7,8 +7,8 @@ import Comment from './comment';
 const ADD_COMMENT = (comments, comment) => comments.concat(comment);
 
 export default function ArticleComments({ slug, article }) {
-	slug = (article && article.slug) || slug;
-	const [comments] = useApi(api => api.listComments(slug), [slug]);
+	const articleSlug = (article && article.slug) || slug;
+	const [comments] = useApi(api => api.listComments(articleSlug), [articleSlug]);
 	const [localComments, addComment] = useReducer(ADD_COMMENT, []);
 	const allComments = [].concat(localComments || [], comments || []);
 

@@ -7,10 +7,6 @@ export default function ArticlePreview({ slug = null, article: data }) {
 
 	const articleUrl = `/article/${encodeURIComponent(article.slug)}`;
 
-	if (!article) {
-		return <div class="article-preview">loading...</div>;
-	}
-
 	return (
 		<div class="article-preview">
 			<ArticleMeta article={article} />
