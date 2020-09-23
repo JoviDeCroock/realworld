@@ -11,7 +11,7 @@ export default async function prerender(req, entry, css) {
   const url = req.url;
   const cache = {};
   await prepass(createElement(App, { url, req, cache }));
-  const html = renderToString(createElement(App, { url, req, cache }));
+  const stringifiedDom = renderToString(createElement(App, { url, req, cache }));
 
   const serializedCache = serialize(cache);
 
@@ -21,14 +21,15 @@ export default async function prerender(req, entry, css) {
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <title>Preact-Realworld-Modern</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link rel="stylesheet" href="/${css}" />
         <script id="data">
           window.__PRERENDER_DATA__ = ${serializedCache}
         </script>
       </head>
       <body>
-        <div id="root">${html}</div>
-        <script src="/${entry}"></script>
+        <div id="root">${stringifiedDom}</div>
+        <script defer src="/${entry}"></script>
       </body>
     </html>
   `;

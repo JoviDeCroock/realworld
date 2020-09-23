@@ -13,6 +13,11 @@ const SettingsPage = lazy(() => import('./modules/settings'));
 const ProfilePage = lazy(() => import('./modules/auth/Profile'));
 const NewArticlePage = lazy(() => import('./modules/arcticles/create'));
 
+import './assets/ionicons.woff'
+import './assets/fonts.css'
+import './assets/main.css'
+import './assets/ionicons.min.css'
+
 export default function App({ cache }) {
 	return (
     <ApiProvider cache={cache}>
