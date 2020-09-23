@@ -10,19 +10,26 @@ const PER_PAGE = 20;
 
 const IS_BROWSER = typeof document !== 'undefined';
 
-function wrapPromise(promise) {
-  let status = "pending";
-  let result;
-  let suspender = promise.then(
-    (r) => {
-			status = "success";
-      result = r;
-    },
-    (e) => {
-      status = "error";
-      result = e;
-    }
-  );
+function wrapPromise(maybePromise) {
+	let status = "pending";
+	let result;
+	let suspender;
+	if (maybePromise.then) {
+		suspender = maybePromise.then(
+			(r) => {
+				status = "success";
+				result = r;
+			},
+			(e) => {
+				status = "error";
+				result = e;
+			}
+		);
+	} else {
+		status = 'success';
+		result = maybePromise;
+	}
+
   return {
     read() {
       if (status === "pending") {
@@ -137,7 +144,7 @@ export default function apiClient(options = {}) {
 	return client;
 }
 
-// const CACHE = new Map();
+const cache = {};
 
 function apiCall(method, url, body, config, client) {
 	config = config || {};
@@ -166,6 +173,9 @@ function apiCall(method, url, body, config, client) {
 	if (config.before) {
 		config.before(opts);
 	}
+
+	const cacheKey = body ? method + url + qs(body) : method + url;
+	if (cache[cacheKey]) return cache[cacheKey];
 
 	let response;
 	return fetch(opts.url, opts)
@@ -202,7 +212,7 @@ function apiCall(method, url, body, config, client) {
 				err.response = response;
 				throw err;
 			}
-			return data;
+			return cache[cacheKey] = data;
 		});
 }
 
