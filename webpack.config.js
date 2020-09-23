@@ -1,11 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
+const glob = require('glob')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const babelConfig = require('./.babelrc');
 const PreactRefreshPlugin = require('@prefresh/webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const PurgecssPlugin = require('purgecss-webpack-plugin')
 
 const env = babelConfig.env;
 const modernTerser = new TerserPlugin({
@@ -47,6 +49,9 @@ const makeConfig = (mode, localDev) => {
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash:5].css'
+    }),
+    isProduction && new PurgecssPlugin({
+      paths: glob.sync(path.join(__dirname, 'src') + '/**/*',  { nodir: true }),
     }),
   ].filter(Boolean);
 
