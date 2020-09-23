@@ -1,4 +1,3 @@
-require('dotenv').config();
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -93,13 +92,6 @@ const makeConfig = (mode, localDev) => {
     },
     module: {
       rules: [
-        {
-          // This is to support our `graphql` dependency, they expose a .mjs bundle instead of .js
-          // Sneaky sneaky sir graphql.
-          test: /\.mjs$/,
-          include: /node_modules/,
-          type: 'javascript/auto',
-        },
         {
           test: /\.(sa|sc|c)ss$/,
 					use: [
