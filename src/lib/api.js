@@ -76,15 +76,21 @@ export default function apiClient(options = {}) {
 		}
 	}
 
-	function method(method, url, config) {
+	function method(method, url, config, promise) {
 		return (...args) =>
-      wrapPromise(apiCall(
+      promise ? wrapPromise(apiCall(
 				method,
 				url.replace(/:[a-z]+/g, (s, f) => enc(args.shift())),
 				args.pop(),
 				config,
 				client
-			));
+			)) : apiCall(
+				method,
+				url.replace(/:[a-z]+/g, (s, f) => enc(args.shift())),
+				args.pop(),
+				config,
+				client
+			);
 	}
 
 	function handleLogin(req, data) {
@@ -118,33 +124,39 @@ export default function apiClient(options = {}) {
 		after: handleLogin
 	});
 
-	client.getMyProfile = method('GET', '/user');
-	client.updateMyProfile = method('PUT', '/user', { bodyKey: 'user' });
+	client.getMyProfile = method('GET', '/user', undefined, false);
+	client.updateMyProfile = method('PUT', '/user', { bodyKey: 'user' }, false);
 
-	client.getProfile = method('GET', `/profiles/:username`);
-	client.followProfile = method('POST', `/profiles/:username/follow`);
-	client.unfollowProfile = method('DELETE', `/profiles/:username/follow`);
+	client.getProfile = method('GET', `/profiles/:username`, undefined, true);
+	client.followProfile = method('POST', `/profiles/:username/follow`, undefined, false);
+	client.unfollowProfile = method('DELETE', `/profiles/:username/follow`, undefined, false);
 
-	client.listTags = method('GET', '/tags');
+	client.listTags = method('GET', '/tags', undefined, true);
 
-	client.listArticles = method('GET', '/articles');
-	client.getArticle = method('GET', '/articles/:slug');
-	client.createArticle = method('POST', '/articles');
-	client.updateArticle = method('PUT', '/articles/:slug');
-	client.deleteArticle = method('DELETE', '/articles/:slug');
+	client.listArticles = method('GET', '/articles', undefined, true);
+	client.getArticle = method('GET', '/articles/:slug', undefined, true);
+	client.createArticle = method('POST', '/articles', undefined, false);
+	client.updateArticle = method('PUT', '/articles/:slug', undefined, false);
+	client.deleteArticle = method('DELETE', '/articles/:slug', undefined, false);
 
-	client.favoriteArticle = method('POST', '/articles/:slug/favorite');
-	client.unfavoriteArticle = method('DELETE', '/articles/:slug/favorite');
+	client.favoriteArticle = method('POST', '/articles/:slug/favorite', undefined, false);
+	client.unfavoriteArticle = method('DELETE', '/articles/:slug/favorite', undefined, false);
 
-	client.listComments = method('GET', '/articles/:slug/comments');
-	client.createComment = method('POST', '/articles/:slug/comments');
-	client.deleteComment = method('POST', '/articles/:slug/comments/:id');
+	client.listComments = method('GET', '/articles/:slug/comments', undefined, true);
+	client.createComment = method('POST', '/articles/:slug/comments', undefined, false);
+	client.deleteComment = method('POST', '/articles/:slug/comments/:id', undefined, false);
+
+	if (options.cache) {
+		cache = options.cache;
+	} else {
+		cache = {};
+	}
 
 	init();
 	return client;
 }
 
-const cache = {};
+let cache;
 
 function apiCall(method, url, body, config, client) {
 	config = config || {};
@@ -192,15 +204,7 @@ function apiCall(method, url, body, config, client) {
 					}
 				}
 			}
-			// if (!opts.body) {
-			// 	const cacheControl = response.headers.get('cache-control') || '';
-			// 	const maxAge = (cacheControl.match(/max-age *= *(\d+)/g) || [])[1] | 0;
-			// 	CACHE.set(cacheKey, {
-			// 		time: Date.now(),
-			// 		maxAge: Math.max(10000, maxAge),
-			// 		data
-			// 	});
-			// }
+
 			opts.response = response;
 			opts.data = data;
 			if (config.after) {

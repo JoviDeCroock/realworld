@@ -13,9 +13,9 @@ const SettingsPage = lazy(() => import('./modules/settings'));
 const ProfilePage = lazy(() => import('./modules/auth/Profile'));
 const NewArticlePage = lazy(() => import('./modules/arcticles/create'));
 
-export default function App() {
+export default function App({ cache }) {
 	return (
-    <ApiProvider>
+    <ApiProvider cache={cache}>
       <div id="app">
         <Header />
         <div id="main">

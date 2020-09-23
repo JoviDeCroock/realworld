@@ -8,10 +8,8 @@ global.fetch = fetch;
 
 export default async function prerender(req) {
   const url = req.url;
-  console.log('prepassing');
-  const data = await prepass(createElement(App, { url, req }));
-  console.log('prepassed', data);
-  const html = renderToString(createElement(App, { url, req }));
-  console.log(html);
+  const cache = {};
+  await prepass(createElement(App, { url, req, cache }));
+  const html = renderToString(createElement(App, { url, req, cache }));
   return html
 }
