@@ -30,7 +30,6 @@ export default function SettingsPage({}) {
 				setLoading(false);
 			})
 			.catch(err => {
-				console.error(err);
 				setError(err);
 			});
 	}, [api, loading, profile]);

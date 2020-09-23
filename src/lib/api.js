@@ -118,13 +118,13 @@ export default function apiClient(options = {}) {
 	client.login = method('POST', '/users/login', {
 		bodyKey: 'user',
 		after: handleLogin
-	});
+	}, false);
 	client.register = method('POST', '/users', {
 		bodyKey: 'user',
 		after: handleLogin
-	});
+	}, false);
 
-	client.getMyProfile = method('GET', '/user', undefined, false);
+	client.getMyProfile = method('GET', '/user', undefined, true);
 	client.updateMyProfile = method('PUT', '/user', { bodyKey: 'user' }, false);
 
 	client.getProfile = method('GET', `/profiles/:username`, undefined, true);

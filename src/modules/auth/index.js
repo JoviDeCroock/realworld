@@ -13,8 +13,8 @@ export default function AuthPage({ isRegister }) {
 	const api = useApiClient();
 
 	const submit = useCallback(() => {
-		api
-			.login({ email, password })
+		const method = isRegister ? api.register : api.login;
+		method({ email, password, username: name })
 			.then(() => {
 				route('/');
 			})

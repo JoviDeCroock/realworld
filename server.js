@@ -1,10 +1,18 @@
 const polka = require('polka');
+const path = require('path');
+const fs = require('fs');
 const sirv = require('sirv');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const prerender = require('./dist/server').default;
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
+const dist = path.resolve(__dirname, 'dist');
+
+const distFiles = fs.readdirSync(dist);
+const jsEntry = distFiles.find(file => file.startsWith('main') && file.endsWith('.js'));
+const cssEntry = distFiles.find(file => file.startsWith('main') && file.endsWith('.css'));
+const fontEntry = distFiles.find(file => file.endsWith('.woff'));
 
 const server = polka();
 
@@ -17,7 +25,7 @@ server.use((req, res, next) => {
 });
 
 server.use(
-	sirv('public', {
+	sirv('dist', {
 		dev: !PRODUCTION,
 		extensions: [],
 		maxAge: 3600,
@@ -40,13 +48,13 @@ server.use('/', cookieParser(), (req, res, next) => {
   res.setHeader('Content-Type', 'text/html;charset=utf-8');
   res.setHeader('X-Content-Type-Options', 'nosniff');
 
-  prerender(req)
+  prerender(req, jsEntry, cssEntry, fontEntry)
     .then(html => {
       res.response = null;
       res.end(html);
     })
     .catch(error => {
-      console.log(error);
+			console.log('error', error)
       next(error.stack);
     });
 });

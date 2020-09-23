@@ -28,14 +28,14 @@ const modernTerser = new TerserPlugin({
   }
 });
 
-const makeConfig = (mode) => {
+const makeConfig = (mode, localDev) => {
   const { NODE_ENV } = process.env;
   const isProduction = NODE_ENV === 'production';
   const isServer = mode === 'server';
 
   // Build plugins
   const plugins = [
-    !isServer && new HtmlWebpackPlugin({ inject: true, template: './index.html' }),
+    localDev && new HtmlWebpackPlugin({ inject: true, template: './index.html' }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
     }),
@@ -141,4 +141,4 @@ const makeConfig = (mode) => {
 
 module.exports = process.env.NODE_ENV === 'production' ?
   [makeConfig('modern'), makeConfig('server')] :
-  makeConfig('modern');
+  makeConfig('modern', true);
