@@ -9,9 +9,6 @@ module.exports = {
   env: {
     legacy: {
       presets: [
-        ['@babel/preset-typescript', {
-          jsxPragma: 'createElement',
-        }],
         [
           '@babel/preset-env', {
             exclude: ['@babel/plugin-transform-typeof-symbol'],
@@ -28,7 +25,6 @@ module.exports = {
       plugins: [
         ...plugins,
         ['@babel/plugin-transform-runtime', { corejs: 3 }],
-
         ['@babel/plugin-transform-react-jsx', {
           'pragma': 'createElement',
           'pragmaFrag': 'Fragment',
@@ -44,7 +40,6 @@ module.exports = {
     },
     modern: {
       presets: [
-        '@babel/preset-typescript',
         ['@babel/preset-modules', { loose: true }]
       ],
       plugins: [
@@ -59,7 +54,6 @@ module.exports = {
     },
     server: {
       presets: [
-        '@babel/preset-typescript',
         ['@babel/preset-modules', { loose: true }]
       ],
       plugins: [

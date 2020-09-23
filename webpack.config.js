@@ -61,13 +61,14 @@ const makeConfig = (mode) => {
     mode: isProduction ? 'production' : 'development',
     entry: mode === 'legacy' ? {
       fetch: 'whatwg-fetch',
-      main: './src/index.tsx',
+      main: './src/index.js',
     } : {
-      main: './src/index.tsx'
+      main: isServer ? './src/prerender.js' :'./src/index.js'
     },
     context: path.resolve(__dirname, './'),
     stats: 'normal',
     devtool: isProduction ? '' : 'eval-source-map',
+		target: isServer ? 'node' : 'web',
     devServer: {
       contentBase: path.join(__dirname, 'dist'),
       host: 'localhost',
@@ -81,18 +82,20 @@ const makeConfig = (mode) => {
       overlay: true,
     },
     output: {
-      chunkFilename: `[name]-[contenthash]${mode === 'modern' ? '.modern.js' : '.js'}`,
-      filename: isProduction ? `[name]-[contenthash]${mode === 'modern' ? '.modern.js' : '.js'}` : `[name]${mode === 'modern' ? '.modern.js' : '.js'}`,
+      chunkFilename: isServer ? undefined : `[name]-[contenthash]${mode === 'modern' ? '.modern.js' : '.js'}`,
+      filename: isProduction ? isServer ? 'index.js' : `[name]-[contenthash]${mode === 'modern' ? '.modern.js' : '.js'}` : `[name]${mode === 'modern' ? '.modern.js' : '.js'}`,
       path: isServer ? path.resolve(__dirname, 'dist', 'server') : path.resolve(__dirname, 'dist'),
       publicPath: '/',
+      libraryTarget: isServer ? 'commonjs2' : undefined
     },
     optimization: {
+      minimize: !isServer,
       minimizer: mode === 'legacy' ? undefined : [modernTerser],
     },
     plugins,
     resolve: {
       mainFields: ['module', 'main', 'browser'],
-      extensions: [".tsx", ".ts", ".mjs", ".js", ".jsx"],
+      extensions: [".mjs", ".js", ".jsx"],
       alias: {
         preact: path.resolve(__dirname, 'node_modules', 'preact'),
         ...(mode === 'modern' ? { 'url': 'native-url' } : {})
@@ -136,15 +139,8 @@ const makeConfig = (mode) => {
           ],
         },
         {
-          // Allows us to debug our typescript just like js.
-          test: /\.js$/,
-          enforce: 'pre',
-          exclude: /node_modules/,
-          loader: 'source-map-loader',
-        },
-        {
           // Makes our babel-loader the lord and savior over our TypeScript
-          test: /\.ts$|\.tsx$/,
+          test: /\.js$|\.jsx$/,
           include: [
             path.resolve(__dirname, "src"),
           ],
