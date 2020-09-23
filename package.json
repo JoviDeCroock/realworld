@@ -57,7 +57,7 @@
     "mitt": "^2.1.0",
     "native-url": "^0.3.4",
     "node-fetch": "^2.6.1",
-    "preact": "^10.4.1",
+    "preact": "^10.5.2",
     "preact-render-to-string": "^5.1.10",
     "preact-router": "^3.2.1",
     "preact-ssr-prepass": "^1.1.1",
