@@ -40,7 +40,6 @@ const makeConfig = (mode, localDev) => {
     localDev && new HtmlWebpackPlugin({ inject: true, template: './index.html' }),
     !isServer && new CopyPlugin({
       patterns: [
-        { from: './src/assets/ionicons.min.css', to: './ionicons.min.css' },
         { from: './src/assets/ionicons.woff', to: './ionicons.woff' },
       ],
     }),

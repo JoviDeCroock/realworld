@@ -24,18 +24,7 @@ export default async function prerender(req, entry, css) {
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link rel="preload" as="style" href="/${css}" />
         <link rel="stylesheet" href="/${css}" />
-        <link
-          rel="icon"
-          href="data:image/svg+xml,<svg width='64' height='64' xmlns='http://www.w3.org/2000/svg'><path fill='%235cb85c' d='M49 32L21 5l-6 5 23 22-23 22 6 5 28-27z'/></svg>"
-        />
-        <link
-          rel="preload"
-          as="font"
-          href="/ionicons.woff"
-          type="font/woff"
-          crossorigin
-        />
-        <link rel="stylesheet" href="/ionicons.min.css" />
+        <link rel="font" href="/ionicons.woff" type="font/woff" />
         <script id="data">
           window.__PRERENDER_DATA__ = ${serializedCache}
         </script>
