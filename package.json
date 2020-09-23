@@ -62,5 +62,9 @@
     "preact-router": "^3.2.1",
     "preact-ssr-prepass": "^1.1.1",
     "tinytime": "^0.2.6"
+  },
+  "volta": {
+    "node": "14.12.0",
+    "yarn": "1.22.5"
   }
 }
