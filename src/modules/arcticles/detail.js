@@ -4,6 +4,8 @@ import ArticleComments from '../comments/comments';
 import { useApi } from '../../lib/use-api';
 import { Loading } from '../../common';
 
+// TODO: add the Suspense.fallbacks again when hydration does not trigger
+// Suspense.fallback boundaries.
 export default function ArticlePage({ slug }) {
 	const article = useApi(api => api.getArticle(slug), [slug]);
 
