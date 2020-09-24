@@ -60,7 +60,7 @@
     "mitt": "^2.1.0",
     "native-url": "^0.3.4",
     "node-fetch": "^2.6.1",
-    "preact": "^10.5.2",
+    "preact": "https://github.pika.dev/preactjs/preact/commit/00722c3c8302ebf7f86dacf2701b7e2d7a0d708e",
     "preact-render-to-string": "^5.1.10",
     "preact-router": "^3.2.1",
     "preact-ssr-prepass": "^1.1.1",

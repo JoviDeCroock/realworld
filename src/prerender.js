@@ -24,7 +24,7 @@ export default async function prerender(req, entry, css) {
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link rel="preload" as="style" href="/${css}" />
         <link rel="stylesheet" href="/${css}" />
-        <link rel="font" href="/ionicons.woff" type="font/woff" />
+        <link rel="preload" as="font" href="/ionicons.woff" type="font/woff" />
         <script id="data">
           window.__PRERENDER_DATA__ = ${serializedCache}
         </script>

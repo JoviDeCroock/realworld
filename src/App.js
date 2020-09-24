@@ -16,6 +16,13 @@ const SettingsPage = lazy(() => import('./modules/settings'));
 const ProfilePage = lazy(() => import('./modules/auth/Profile'));
 const NewArticlePage = lazy(() => import('./modules/arcticles/create'));
 
+Suspense.prototype.componentDidCatch = function(e) {
+  if (e && e.then) {
+    this.__d = true;
+    e.then(() => this.setState({ e }));
+  }
+}
+
 // TODO: add the Suspense.fallbacks again when hydration does not trigger
 // Suspense.fallback boundaries.
 export default function App({ cache }) {
@@ -24,7 +31,7 @@ export default function App({ cache }) {
       <div id="app">
         <Header />
         <div id="main">
-          <Suspense>
+          <Suspense fallback={<Loading />}>
             <Router>
               <HomePage path="/" />
               <ArticlePage path="/article/:slug" />

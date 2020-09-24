@@ -4,6 +4,13 @@ import ArticleComments from '../comments/comments';
 import { useApi } from '../../lib/use-api';
 import { Loading } from '../../common';
 
+Suspense.prototype.componentDidCatch = function(e) {
+  if (e && e.then) {
+    this.__d = true;
+    e.then(() => this.setState({ e }));
+  }
+}
+
 // TODO: add the Suspense.fallbacks again when hydration does not trigger
 // Suspense.fallback boundaries.
 export default function ArticlePage({ slug }) {
@@ -57,7 +64,7 @@ export default function ArticlePage({ slug }) {
 				</div>
 
 				<div class="row">
-					<Suspense>
+					<Suspense fallback={<Loading />}>
 						<ArticleComments article={article} />
 					</Suspense>
 				</div>
