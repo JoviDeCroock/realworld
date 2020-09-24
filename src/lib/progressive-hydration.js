@@ -17,4 +17,4 @@ import { h } from 'preact';
 //   }
 // }
 
-export { Suspense, lazy } from 'preact';
+export { Suspense, lazy } from 'preact/compat';
