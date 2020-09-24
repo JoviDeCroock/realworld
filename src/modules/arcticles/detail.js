@@ -1,4 +1,5 @@
-import { Suspense, createElement } from 'preact/compat';
+import { createElement } from 'preact';
+import { Suspense } from '../../lib/progressive-hydration'
 import ArticleMeta from './meta';
 import ArticleComments from '../comments/comments';
 import { useApi } from '../../lib/use-api';

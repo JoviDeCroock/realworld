@@ -1,7 +1,8 @@
 import './assets/main.css';
 import './assets/fonts.css';
 import './assets/ionicons.min.css';
-import { lazy, Suspense, createElement } from 'preact/compat';
+import { createElement } from 'preact';
+import { lazy, Suspense } from './lib/progressive-hydration';
 import { Router } from 'preact-router';
 
 import { Loading } from './common';

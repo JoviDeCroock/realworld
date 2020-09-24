@@ -54,7 +54,8 @@ server.use('/', cookieParser(), (req, res, next) => {
       res.end(html);
     })
     .catch(error => {
-			console.log('error', error)
+			console.log('error', error);
+			if (error.then) error.then(console.log)
       next(error.stack);
     });
 });
