@@ -4572,9 +4572,10 @@ preact-ssr-prepass@^1.1.1:
   resolved "https://registry.yarnpkg.com/preact-ssr-prepass/-/preact-ssr-prepass-1.1.1.tgz#1031e50c3b80cbdd8e155e520d0e97b9bc425faa"
   integrity sha512-AszER25gPq8GMcUP+PruRCRg6FEgeoVfR8tlquz7QCPbRLSqkmHkTNwRiwx0zeRl0wd0CtFN4D9r6zCPeVo8Hg==
 
-"preact@https://github.pika.dev/preactjs/preact/commit/00722c3c8302ebf7f86dacf2701b7e2d7a0d708e":
-  version "10.4.8"
-  resolved "https://github.pika.dev/preactjs/preact/commit/00722c3c8302ebf7f86dacf2701b7e2d7a0d708e#ef0303476d5d1b4715a6f17b000c6c0a11ffc2cc"
+preact@latest:
+  version "10.5.2"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.5.2.tgz#4c07c27f4239666840e0d637ec7c110cfcae181d"
+  integrity sha512-4y2Q6kMiJtMONMJR7z+o8P5tGkMzVItyy77AXGrUdusv+dk4jwoS3KrpCBkFloY2xsScRJYwZQZrx89tTjDkOw==
 
 prepend-http@^1.0.0:
   version "1.0.4"
