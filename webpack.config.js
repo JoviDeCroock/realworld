@@ -1,12 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
-const glob = require('glob')
+const glob = require('glob');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const babelConfig = require('./.babelrc');
 const PreactRefreshPlugin = require('@prefresh/webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const PurgecssPlugin = require('purgecss-webpack-plugin')
+const PurgecssPlugin = require('purgecss-webpack-plugin');
 
 const env = babelConfig.env;
 const modernTerser = new TerserPlugin({
@@ -26,7 +26,7 @@ const modernTerser = new TerserPlugin({
     ecma: 8,
     safari10: true,
     toplevel: true,
-  }
+  },
 });
 
 const makeConfig = (mode, localDev) => {
@@ -36,16 +36,20 @@ const makeConfig = (mode, localDev) => {
 
   // Build plugins
   const plugins = [
-    localDev && new HtmlWebpackPlugin({ inject: true, template: './index.html' }),
+    localDev &&
+      new HtmlWebpackPlugin({ inject: true, template: './index.html' }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].[contenthash:5].css'
+      filename: '[name].[contenthash:5].css',
     }),
-    isProduction && new PurgecssPlugin({
-      paths: glob.sync(path.join(__dirname, 'src') + '/**/*',  { nodir: true }),
-    }),
+    isProduction &&
+      new PurgecssPlugin({
+        paths: glob.sync(path.join(__dirname, 'src') + '/**/*', {
+          nodir: true,
+        }),
+      }),
   ].filter(Boolean);
 
   if (!isProduction) {
@@ -57,12 +61,12 @@ const makeConfig = (mode, localDev) => {
   return {
     mode: isProduction ? 'production' : 'development',
     entry: {
-      main: isServer ? './src/prerender.js' :'./src/index.js'
+      main: isServer ? './src/prerender.js' : './src/index.js',
     },
     context: path.resolve(__dirname, './'),
     stats: 'normal',
     devtool: isProduction ? '' : 'eval-source-map',
-		target: isServer ? 'node' : 'web',
+    target: isServer ? 'node' : 'web',
     devServer: {
       contentBase: path.join(__dirname, 'dist'),
       host: 'localhost',
@@ -77,10 +81,16 @@ const makeConfig = (mode, localDev) => {
     },
     output: {
       chunkFilename: isServer ? undefined : `[name]-[contenthash].js`,
-      filename: isProduction ? isServer ? 'index.js' : `[name]-[contenthash].js` : `[name].js`,
-      path: isServer ? path.resolve(__dirname, 'dist', 'server') : path.resolve(__dirname, 'dist'),
+      filename: isProduction
+        ? isServer
+          ? 'index.js'
+          : `[name]-[contenthash].js`
+        : `[name].js`,
+      path: isServer
+        ? path.resolve(__dirname, 'dist', 'server')
+        : path.resolve(__dirname, 'dist'),
       publicPath: '/',
-      libraryTarget: isServer ? 'commonjs2' : undefined
+      libraryTarget: isServer ? 'commonjs2' : undefined,
     },
     optimization: {
       minimize: !isServer,
@@ -89,27 +99,27 @@ const makeConfig = (mode, localDev) => {
     plugins,
     resolve: {
       mainFields: ['module', 'main', 'browser'],
-      extensions: [".mjs", ".js", ".jsx"],
+      extensions: ['.mjs', '.js', '.jsx'],
       alias: {
         preact: path.resolve(__dirname, 'node_modules', 'preact'),
-        url: 'native-url'
+        url: 'native-url',
       },
     },
     module: {
       rules: [
         {
           test: /\.(sa|sc|c)ss$/,
-					use: [
-						{
-							loader: MiniCssExtractPlugin.loader,
-							options: {
-								esModule: true,
-								fallback: 'style-loader'
-							}
-						},
-						{ loader: 'css-loader', options: { esModule: true } }
-					]
-				},
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                esModule: true,
+                fallback: 'style-loader',
+              },
+            },
+            { loader: 'css-loader', options: { esModule: true } },
+          ],
+        },
         {
           test: /\.(png|jpe?g|gif|woff)$/,
           use: [
@@ -122,20 +132,19 @@ const makeConfig = (mode, localDev) => {
         {
           // Makes our babel-loader the lord and savior over our TypeScript
           test: /\.js$|\.jsx$/,
-          include: [
-            path.resolve(__dirname, "src"),
-          ],
+          include: [path.resolve(__dirname, 'src')],
           loader: 'babel-loader',
           options: {
             cacheDirectory: true,
             ...env[mode],
-          }
+          },
         },
       ],
     },
   };
 };
 
-module.exports = process.env.NODE_ENV === 'production' ?
-  [makeConfig('modern'), makeConfig('server')] :
-  makeConfig('modern', true);
+module.exports =
+  process.env.NODE_ENV === 'production'
+    ? [makeConfig('modern'), makeConfig('server')]
+    : makeConfig('modern', true);

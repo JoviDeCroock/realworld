@@ -13,19 +13,19 @@ const ApiContext = createContext(null);
 const AuthContext = createContext(null);
 
 export function ApiProvider({ children, ...config }) {
-	const api = useMemo(() => apiClient(config), [config]);
-	const [user, setUser] = useState(api.getCurrentUser());
+  const api = useMemo(() => apiClient(config), [config]);
+  const [user, setUser] = useState(api.getCurrentUser());
 
-	useEffect(() => {
-		api.on('user', setUser);
-		return () => api.off('user', setUser);
-	}, [api]);
+  useEffect(() => {
+    api.on('user', setUser);
+    return () => api.off('user', setUser);
+  }, [api]);
 
-	return (
-		<ApiContext.Provider value={api}>
-			<AuthContext.Provider value={user}>{children}</AuthContext.Provider>
-		</ApiContext.Provider>
-	);
+  return (
+    <ApiContext.Provider value={api}>
+      <AuthContext.Provider value={user}>{children}</AuthContext.Provider>
+    </ApiContext.Provider>
+  );
 }
 
 /**
@@ -34,14 +34,14 @@ export function ApiProvider({ children, ...config }) {
  */
 export function useApi(method, deps) {
   const api = useApiClient();
-	const result = useMemo(() => method(api), deps);
+  const result = useMemo(() => method(api), deps);
   return result.read ? result.read() : result;
 }
 
 export function useApiClient() {
-	return useContext(ApiContext);
+  return useContext(ApiContext);
 }
 
 export function useCurrentUser() {
-	return useContext(AuthContext);
+  return useContext(AuthContext);
 }

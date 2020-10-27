@@ -9,7 +9,9 @@ import { Loading } from './common';
 import { ApiProvider } from './lib/use-api';
 import Footer from './common/Footer';
 import Header from './common/Header';
+// import HomePage from './modules/arcticles';
 
+// TODO: when we comment this and uncomment the above we reduce DOM-mutations
 const HomePage = lazy(() => import('./modules/arcticles'));
 const ArticlePage = lazy(() => import('./modules/arcticles/detail'));
 const AuthPage = lazy(() => import('./modules/auth'));
@@ -17,10 +19,8 @@ const SettingsPage = lazy(() => import('./modules/settings'));
 const ProfilePage = lazy(() => import('./modules/auth/Profile'));
 const NewArticlePage = lazy(() => import('./modules/arcticles/create'));
 
-// TODO: add the Suspense.fallbacks again when hydration does not trigger
-// Suspense.fallback boundaries.
 export default function App({ cache }) {
-	return (
+  return (
     <ApiProvider cache={cache}>
       <div id="app">
         <Header />
@@ -42,13 +42,13 @@ export default function App({ cache }) {
         <Footer />
       </div>
     </ApiProvider>
-	);
+  );
 }
 
 function NotFound() {
-	return (
-		<div>
-			<h2>Not Found</h2>
-		</div>
-	);
+  return (
+    <div>
+      <h2>Not Found</h2>
+    </div>
+  );
 }

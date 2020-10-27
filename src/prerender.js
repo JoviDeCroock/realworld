@@ -11,7 +11,9 @@ export default async function prerender(req, entry, css) {
   const url = req.url;
   const cache = {};
   await prepass(createElement(App, { url, req, cache }));
-  const stringifiedDom = renderToString(createElement(App, { url, req, cache }));
+  const stringifiedDom = renderToString(
+    createElement(App, { url, req, cache })
+  );
 
   const serializedCache = serialize(cache);
 

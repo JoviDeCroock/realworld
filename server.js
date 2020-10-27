@@ -10,8 +10,12 @@ const PRODUCTION = process.env.NODE_ENV === 'production';
 const dist = path.resolve(__dirname, 'dist');
 
 const distFiles = fs.readdirSync(dist);
-const jsEntry = distFiles.find(file => file.startsWith('main') && file.endsWith('.js'));
-const cssEntry = distFiles.find(file => file.startsWith('main') && file.endsWith('.css'));
+const jsEntry = distFiles.find(
+  file => file.startsWith('main') && file.endsWith('.js')
+);
+const cssEntry = distFiles.find(
+  file => file.startsWith('main') && file.endsWith('.css')
+);
 const fontEntry = distFiles.find(file => file.endsWith('.woff'));
 
 const server = polka();
@@ -20,27 +24,27 @@ server.use(compression());
 
 // serve static files from public/*
 server.use((req, res, next) => {
-	res._requestHeaders = req.headers;
-	next();
+  res._requestHeaders = req.headers;
+  next();
 });
 
 server.use(
-	sirv('dist', {
-		dev: !PRODUCTION,
-		extensions: [],
-		maxAge: 3600,
-		etag: true,
-		setHeaders(res, path, stats) {
-			const etag = res._requestHeaders['if-none-match'];
-			const computedEtag = `W/"${stats.size}-${stats.mtime.getTime()}"`;
-			if (etag && etag === computedEtag) {
-				res.writeHead(304);
-				res.end();
-				// disable sirv's normal response & piping:
-				res.writeHead = res.write = res.end = () => {};
-			}
-		}
-	})
+  sirv('dist', {
+    dev: !PRODUCTION,
+    extensions: [],
+    maxAge: 3600,
+    etag: true,
+    setHeaders(res, path, stats) {
+      const etag = res._requestHeaders['if-none-match'];
+      const computedEtag = `W/"${stats.size}-${stats.mtime.getTime()}"`;
+      if (etag && etag === computedEtag) {
+        res.writeHead(304);
+        res.end();
+        // disable sirv's normal response & piping:
+        res.writeHead = res.write = res.end = () => {};
+      }
+    },
+  })
 );
 
 server.use('/', cookieParser(), (req, res, next) => {
@@ -54,10 +58,10 @@ server.use('/', cookieParser(), (req, res, next) => {
       res.end(html);
     })
     .catch(error => {
-			console.log('error', error);
-			if (error.then) error.then(console.log)
+      console.log('error', error);
+      if (error.then) error.then(console.log);
       next(error.stack);
     });
 });
 
-server.listen(process.env.PORT || 5001);
+server.listen(process.env.PORT || 5000);
