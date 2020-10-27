@@ -18,5 +18,3 @@ export class Suspense {
     return props.children;
   }
 }
-
-// export { Suspense, lazy } from 'preact/compat';
