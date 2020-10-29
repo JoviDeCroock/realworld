@@ -1,4 +1,4 @@
-import { createElement } from 'preact';
+import { createElement, Fragment } from 'preact';
 import { useApi } from '../../lib/use-api';
 import ArticlePreview from './preview';
 
@@ -9,7 +9,11 @@ export default function ArticlesList({ author, tag, favorited, limit }) {
     [author, tag, favorited, limit]
   );
 
-  return articles.map(article => (
-    <ArticlePreview key={article.title} article={article} />
-  ));
+  return (
+    <div>
+      {articles.map(article => (
+        <ArticlePreview key={article.title} article={article} />
+      ))}
+    </div>
+  );
 }
