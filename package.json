@@ -50,7 +50,7 @@
     "js-cookie": "^2.2.1",
     "mitt": "^2.1.0",
     "native-url": "^0.3.4",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "preact": "10.5.5",
     "preact-render-to-string": "^5.1.11",
     "preact-router": "^3.2.1",
